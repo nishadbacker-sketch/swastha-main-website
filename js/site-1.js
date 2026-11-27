@@ -371,6 +371,7 @@ bookingForm.addEventListener('submit', function(e) {
     contact_number: diffToggle.checked ? valueFrom(d,'altPhone') : '',
     child: valueFrom(d,'child'),
     gender: valueFrom(d,'gender'),
+    language: currentLang === 'ml' ? 'ml' : 'en',
     dob: valueFrom(d,'dob'),
     grade: valueFrom(d,'class'),
     notes: [valueFrom(d,'support'),valueFrom(d,'message')].filter(Boolean).join(' — ').slice(0,700),
