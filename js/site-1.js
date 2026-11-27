@@ -335,15 +335,19 @@ function closeAssessment() {
 window.addEventListener('message', function(event) {
   if (event.origin !== ASSESSMENT_ORIGIN ||
       !assessmentFrame || event.source !== assessmentFrame.contentWindow ||
-      !event.data || event.data.type !== 'swastha:free-assessment:ready' ||
-      !assessmentDetails) return;
-  assessmentFrame.contentWindow.postMessage({
-    type: 'swastha:free-assessment:details', details: assessmentDetails
-  }, ASSESSMENT_ORIGIN);
-  bookingFeedback.style.color = '#176b58';
-  bookingFeedback.textContent = currentLang === 'ml'
-    ? '25 ചോദ്യങ്ങളുള്ള വിലയിരുത്തൽ ആരംഭിച്ചു. വിവരങ്ങൾ വീണ്ടും നൽകേണ്ടതില്ല.'
-    : 'Your assessment is ready. You do not need to enter your child details again.';
+      !event.data || !assessmentDetails) return;
+  if (event.data.type === 'swastha:free-assessment:ready') {
+    assessmentFrame.contentWindow.postMessage({
+      type: 'swastha:free-assessment:details', details: assessmentDetails
+    }, ASSESSMENT_ORIGIN);
+    return;
+  }
+  if (event.data.type === 'swastha:free-assessment:accepted') {
+    bookingFeedback.style.color = '#176b58';
+    bookingFeedback.textContent = currentLang === 'ml'
+      ? 'കുട്ടിയുടെ വിവരങ്ങൾ സുരക്ഷിതമായി ലഭിച്ചു. 25 ചോദ്യങ്ങൾക്ക് ഉത്തരം നൽകൂ.'
+      : 'Child details received successfully. Please answer all 25 questions.';
+  }
 });
 
 bookingForm.addEventListener('submit', function(e) {
