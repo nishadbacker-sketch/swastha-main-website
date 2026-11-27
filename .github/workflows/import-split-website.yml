@@ -1,0 +1,49 @@
+name: Import split Swastha website files
+on:
+  push:
+    paths:
+      - '.github/workflows/import-split-website.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Verify and unpack website ZIP
+        run: |
+          set -euo pipefail
+          test -f swastha-main-website-split.zip
+          python3 - <<'PY'
+          from zipfile import ZipFile
+          from pathlib import PurePosixPath
+          with ZipFile("swastha-main-website-split.zip") as z:
+              files=set(z.namelist())
+              required={"index.html","robots.txt","sitemap.xml",
+                        "css/stylesheet-1.css","css/stylesheet-2.css",
+                        "js/site-1.js","assets/illustration-1.png",
+                        "assets/illustration-2.jpg"}
+              assert required.issubset(files), f"Missing required files: {required-files}"
+              assert all(not p.startswith("/") and ".." not in PurePosixPath(p).parts for p in files), "Unsafe ZIP path"
+              assert all(p in required or p=="README.md" for p in files), "Unexpected files in archive"
+              z.extractall(".")
+          PY
+          test -s index.html
+          grep -q 'Go to Free Assessment' index.html
+          grep -q 'swastha:free-assessment:details' js/site-1.js
+      - name: Commit extracted site files
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html robots.txt sitemap.xml css/ js/ assets/
+          git rm -- swastha-main-website-split.zip
+          if ! git diff --cached --quiet; then
+            git commit -m "Import split Swastha website files from verified ZIP"
+            git push origin HEAD:main
+          fi
