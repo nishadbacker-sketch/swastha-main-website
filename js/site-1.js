@@ -56,7 +56,7 @@ const translations = {
     stepsTitle: "A simple assessment can help you see the bigger picture.",
     stepsDesc: "Our team will guide your child through suitable activities and discuss the next steps with you.",
     step1Title: "1. Book your free assessment",
-    step1Desc: "Share a few details and choose your preferred date and time.",
+    step1Desc: "Share your child’s details once, then complete the free online assessment.",
     step2Title: "2. Visit our clinic",
     step2Desc: "Bring your child for a friendly, in-person assessment session.",
     step3Title: "3. Understand the way forward",
@@ -66,7 +66,7 @@ const translations = {
     bookDesc: "Take the first step towards understanding your child's learning. Complete the short form once, then answer 25 questions online. Our team can follow up if needed.",
     ben1: "Free initial assessment",
     ben2: "In-person clinic visit",
-    ben3: "Convenient time selection",
+    ben3: "Free online screening at your convenience",
     ben4: "Personal confirmation",
     bookNotice: "Complete the online screening first. The clinic receives your responses after you submit the 25 questions.",
     formTitle: "Free assessment details",
@@ -89,12 +89,6 @@ const translations = {
     optClass8_10: "Class 8–10",
     optClass11_12: "Class 11–12",
     optClassOther: "Other / Not attending school",
-    lblDate: "Preferred visit date",
-    lblTime: "Preferred time",
-    timeMorning: "☀️ Morning",
-    timeAfternoon: "🌤️ Afternoon",
-    timeEvening: "🌇 Evening",
-    timeFlexible: "🕒 Flexible",
     lblSupport: "What would you like help understanding? (Optional)",
     sup1: "No specific concern / General assessment",
     sup2: "Reading or language",
@@ -111,7 +105,7 @@ const translations = {
     btnSubmit: "Go to Free Assessment",
     privacyNote: "Your assessment opens in a new tab. Your child’s details are passed securely without being entered again.",
     visitTitle: "We look forward to welcoming you.",
-    visitDesc: "Choose your preferred date above. Our team will share the clinic address, directions and confirmed appointment details with you on WhatsApp.",
+    visitDesc: "Complete the free online screening first. Our team can discuss suitable follow-up support with you.",
     visitBtn: "Ask for clinic location",
     faqKicker: "GOOD TO KNOW",
     faqTitle: "Frequently asked questions",
@@ -187,7 +181,7 @@ const translations = {
     stepsTitle: "ലളിതമായ ഒരു വിലയിരുത്തലിലൂടെ വ്യക്തമായ ചിത്രം ലഭിക്കും.",
     stepsDesc: "അനുയോജ്യമായ പ്രവർത്തനങ്ങളിലൂടെ ഞങ്ങളുടെ ടീം കുട്ടിയെ നയിക്കുകയും തുടർനടപടികൾ നിങ്ങളുമായി ചർച്ച ചെയ്യുകയും ചെയ്യും.",
     step1Title: "1. സൗജന്യ വിലയിരുത്തലിലേക്ക് പോകൂ",
-    step1Desc: "അടിസ്ഥാന വിവരങ്ങൾ നൽകി നിങ്ങൾക്ക് സൗകര്യപ്രദമായ തീയതിയും സമയവും തിരഞ്ഞെടുക്കൂ.",
+    step1Desc: "കുട്ടിയുടെ വിവരങ്ങൾ ഒരിക്കൽ മാത്രം നൽകി സൗജന്യ ഓൺലൈൻ വിലയിരുത്തൽ പൂർത്തിയാക്കൂ.",
     step2Title: "2. ക്ലിനിക്ക് സന്ദർശിക്കൂ",
     step2Desc: "സൗഹൃദപരമായ നേരിട്ടുള്ള വിലയിരുത്തലിനായി കുട്ടിയുമായി ക്ലിനിക്കിൽ വരൂ.",
     step3Title: "3. മുന്നോട്ടുള്ള വഴി മനസ്സിലാക്കൂ",
@@ -197,7 +191,7 @@ const translations = {
     bookDesc: "അടിസ്ഥാന വിവരങ്ങൾ നൽകി 25 ചോദ്യങ്ങളുള്ള ഓൺലൈൻ വിലയിരുത്തൽ പൂർത്തിയാക്കൂ.",
     ben1: "സൗജന്യ പ്രാഥമിക വിലയിരുത്തൽ",
     ben2: "ക്ലിനിക്കിൽ നേരിട്ടുള്ള സന്ദർശനം",
-    ben3: "സൗകര്യപ്രദമായ സമയം തിരഞ്ഞെടുക്കാം",
+    ben3: "സൗകര്യപ്രദമായി ഓൺലൈൻ വിലയിരുത്തൽ",
     ben4: "വ്യക്തിഗത സ്ഥിരീകരണം",
     bookNotice: "25 ചോദ്യങ്ങൾക്ക് ഉത്തരം നൽകി സമർപ്പിച്ചതിനുശേഷം ക്ലിനിക്കിന് വിലയിരുത്തൽ വിവരങ്ങൾ ലഭിക്കും.",
     formTitle: "സൗജന്യ വിലയിരുത്തൽ വിവരങ്ങൾ",
@@ -220,12 +214,6 @@ const translations = {
     optClass8_10: "ക്ലാസ്സ് 8–10",
     optClass11_12: "ക്ലാസ്സ് 11–12",
     optClassOther: "മറ്റുള്ളവ / സ്കൂളിൽ ചേർന്നിട്ടില്ല",
-    lblDate: "സന്ദർശിക്കാൻ താല്പര്യമുള്ള തീയതി",
-    lblTime: "താല്പര്യമുള്ള സമയം",
-    timeMorning: "☀️ രാവിലെ",
-    timeAfternoon: "🌤️ ഉച്ചയ്ക്ക് ശേഷം",
-    timeEvening: "🌇 വൈകുന്നേരം",
-    timeFlexible: "🕒 ഏതു സമയവും സൗകര്യപ്രദം",
     lblSupport: "എന്താണ് മനസ്സിലാക്കാൻ സഹായം വേണ്ടത്? (നിർബന്ധമില്ല)",
     sup1: "പ്രത്യേക ആശങ്കകളില്ല / പൊതുവായ വിലയിരുത്തൽ",
     sup2: "വായന അല്ലെങ്കിൽ ഭാഷാശേഷി",
@@ -287,11 +275,9 @@ function setLanguage(lang) {
   });
 }
 
-const dateInput = document.getElementById('date');
 const dobInput = document.getElementById('dob');
 const today = new Date();
 const localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-dateInput.min = localToday;
 dobInput.max = localToday;
 
 const diffToggle = document.getElementById('diffContactToggle');
@@ -366,8 +352,6 @@ bookingForm.addEventListener('submit', function(e) {
     child: valueFrom(d,'child'),
     dob: valueFrom(d,'dob'),
     grade: valueFrom(d,'class'),
-    preferred_date: valueFrom(d,'date'),
-    preferred_time: valueFrom(d,'time'),
     notes: [valueFrom(d,'support'),valueFrom(d,'message')].filter(Boolean).join(' — ').slice(0,700),
     consent: Boolean(document.getElementById('consent').checked)
   };
