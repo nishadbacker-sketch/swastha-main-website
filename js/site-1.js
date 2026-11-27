@@ -325,6 +325,7 @@ let assessmentDetails = null;
 let savedScroll = '';
 
 function closeAssessment() {
+  document.querySelectorAll('[data-swastha-assessment-overlay="true"]').forEach(el => el.remove());
   if (assessmentOverlay) assessmentOverlay.remove();
   assessmentOverlay = null;
   assessmentFrame = null;
@@ -394,11 +395,13 @@ bookingForm.addEventListener('submit', function(e) {
   savedScroll = document.body.style.overflow;
   document.body.style.overflow = 'hidden';
   const overlay = document.createElement('div');
+  overlay.setAttribute('data-swastha-assessment-overlay','true');
   overlay.setAttribute('role','dialog');
   overlay.setAttribute('aria-modal','true');
   overlay.setAttribute('aria-label','Swastha Free Assessment');
   overlay.style.cssText = 'position:fixed;inset:0;z-index:2147483640;background:#123e35f2;display:flex;flex-direction:column;padding:9px;gap:8px';
   const closeButton = document.createElement('button');
+  closeButton.setAttribute('data-swastha-return-control','true');
   closeButton.type='button';
   closeButton.textContent = currentLang === 'ml' ? '← വെബ്സൈറ്റിലേക്ക് മടങ്ങുക' : '← Back to Swastha Website';
   closeButton.style.cssText='align-self:flex-end;border:0;border-radius:10px;background:white;color:#176b58;font-size:14px;font-weight:700;padding:10px 16px;cursor:pointer';
