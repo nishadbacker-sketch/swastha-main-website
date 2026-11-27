@@ -183,6 +183,14 @@
     <input id="child" name="child" placeholder="Child's name" data-i18n-ph="phChild" required>
    </div>
    <div class="field">
+    <label for="gender"><span data-i18n="lblGender">Gender</span> <span class="req-star">*</span></label>
+    <select id="gender" name="gender" required>
+     <option value="" data-i18n="optGenderDefault">Select gender</option>
+     <option value="male" data-i18n="optGenderMale">Male</option>
+     <option value="female" data-i18n="optGenderFemale">Female</option>
+    </select>
+   </div>
+   <div class="field">
     <label for="dob"><span data-i18n="lblDob">Date of birth</span> <span class="req-star">*</span></label>
     <input id="dob" name="dob" type="date" required>
    </div>
