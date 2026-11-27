@@ -316,43 +316,55 @@ const valueFrom = (formData, ...names) => {
   return '';
 };
 
-// Main website is the only place parents enter guardian and child details.
-// A new tab carries a verified opener reference; no PII in URLs or localStorage.
+// The main website collects child details once. Keep the questionnaire on this
+// page in a cross-origin iframe so the browser does not discard window.opener.
 const ASSESSMENT_ORIGIN = 'https://portal.swasthalearning.com';
-let assessmentWindow = null;
+let assessmentFrame = null;
+let assessmentOverlay = null;
 let assessmentDetails = null;
+let savedScroll = '';
+
+function closeAssessment() {
+  if (assessmentOverlay) assessmentOverlay.remove();
+  assessmentOverlay = null;
+  assessmentFrame = null;
+  assessmentDetails = null;
+  document.body.style.overflow = savedScroll;
+}
+
 window.addEventListener('message', function(event) {
   if (event.origin !== ASSESSMENT_ORIGIN ||
-      !assessmentWindow || event.source !== assessmentWindow ||
+      !assessmentFrame || event.source !== assessmentFrame.contentWindow ||
       !event.data || event.data.type !== 'swastha:free-assessment:ready' ||
       !assessmentDetails) return;
-  assessmentWindow.postMessage({
+  assessmentFrame.contentWindow.postMessage({
     type: 'swastha:free-assessment:details', details: assessmentDetails
   }, ASSESSMENT_ORIGIN);
   bookingFeedback.style.color = '#176b58';
   bookingFeedback.textContent = currentLang === 'ml'
-    ? 'സൗജന്യ വിലയിരുത്തൽ പുതിയ ടാബിൽ തുറന്നു. 25 ചോദ്യങ്ങൾ പൂർത്തിയാക്കൂ.'
-    : 'Your assessment has opened in a new tab. Please answer all 25 questions.';
+    ? '25 ചോദ്യങ്ങളുള്ള വിലയിരുത്തൽ ആരംഭിച്ചു. വിവരങ്ങൾ വീണ്ടും നൽകേണ്ടതില്ല.'
+    : 'Your assessment is ready. You do not need to enter your child details again.';
 });
+
 bookingForm.addEventListener('submit', function(e) {
   e.preventDefault();
   if (!this.reportValidity()) return;
   const d = new FormData(this);
-  const phone = valueFrom(d, 'phone').replace(/\D/g, '');
+  const phone = valueFrom(d, 'phone').replace(/\\D/g, '');
   if (phone.length < 10 || phone.length > 15) {
     bookingFeedback.style.color = '#b42318';
     bookingFeedback.textContent = translations[currentLang].alertWa;
     return;
   }
   if (diffToggle.checked) {
-    const extra = valueFrom(d, 'altPhone').replace(/\D/g, '');
+    const extra = valueFrom(d, 'altPhone').replace(/\\D/g, '');
     if (extra.length < 10 || extra.length > 15) {
       bookingFeedback.style.color = '#b42318';
       bookingFeedback.textContent = translations[currentLang].alertAlt;
       return;
     }
   }
-  assessmentDetails = {
+  const details = {
     guardian: valueFrom(d,'parent'),
     phone: valueFrom(d,'phone'),
     contact_differs: Boolean(diffToggle.checked),
@@ -364,22 +376,39 @@ bookingForm.addEventListener('submit', function(e) {
     notes: [valueFrom(d,'support'),valueFrom(d,'message')].filter(Boolean).join(' — ').slice(0,700),
     consent: Boolean(document.getElementById('consent').checked)
   };
-  if (assessmentWindow && !assessmentWindow.closed) {
-    assessmentWindow.focus();
-    // Re-send the values on page load; a new tab also emits ready.
-    assessmentWindow.postMessage({type:'swastha:free-assessment:details',details:assessmentDetails},ASSESSMENT_ORIGIN);
-    return;
-  }
-  assessmentWindow = window.open(ASSESSMENT_ORIGIN+'/free-assessment', '_blank');
-  if (!assessmentWindow) {
+  if (!details.guardian || !details.phone || !details.child || !details.dob ||
+      !details.grade || !details.consent) {
     bookingFeedback.style.color = '#b42318';
     bookingFeedback.textContent = currentLang === 'ml'
-      ? 'ദയവായി ഈ സൈറ്റിന് പുതിയ ടാബ് തുറക്കാൻ അനുമതി നൽകൂ.'
-      : 'Please allow pop-ups for this site to open your free assessment.';
+      ? 'ആവശ്യമായ വിവരങ്ങൾ പൂരിപ്പിക്കുക.'
+      : 'Please complete all required child and guardian details.';
     return;
   }
-  bookingFeedback.style.color = '#176b58';
+  closeAssessment();
+  assessmentDetails = details;
+  savedScroll = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
+  const overlay = document.createElement('div');
+  overlay.setAttribute('role','dialog');
+  overlay.setAttribute('aria-modal','true');
+  overlay.setAttribute('aria-label','Swastha Free Assessment');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:2147483640;background:#123e35f2;display:flex;flex-direction:column;padding:9px;gap:8px';
+  const closeButton = document.createElement('button');
+  closeButton.type='button';
+  closeButton.textContent = currentLang === 'ml' ? '← വെബ്സൈറ്റിലേക്ക് മടങ്ങുക' : '← Back to Swastha Website';
+  closeButton.style.cssText='align-self:flex-end;border:0;border-radius:10px;background:white;color:#176b58;font-size:14px;font-weight:700;padding:10px 16px;cursor:pointer';
+  closeButton.addEventListener('click',closeAssessment);
+  const iframe = document.createElement('iframe');
+  iframe.src = ASSESSMENT_ORIGIN + '/free-assessment';
+  iframe.title = 'Swastha Child Development Questionnaire';
+  iframe.referrerPolicy = 'no-referrer';
+  iframe.style.cssText='display:block;flex:1;min-height:0;width:100%;border:0;border-radius:12px;background:white';
+  overlay.append(closeButton,iframe);
+  assessmentOverlay=overlay;
+  assessmentFrame=iframe;
+  document.body.appendChild(overlay);
+  bookingFeedback.style.color='#176b58';
   bookingFeedback.textContent = currentLang === 'ml'
-    ? 'സൗജന്യ വിലയിരുത്തൽ പുതിയ ടാബിൽ തുറക്കുന്നു…'
-    : 'Opening the free assessment in a new tab…';
+    ? 'സൗജന്യ വിലയിരുത്തൽ തുറക്കുന്നു…'
+    : 'Opening your 25-question assessment…';
 });
